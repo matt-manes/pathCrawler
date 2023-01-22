@@ -1,28 +1,17 @@
 from pathlib import Path
+from typing import Generator
 
-from printbuddies import clear, print_in_place
 
-
-def crawl(start_dir: Path | str, quiet: bool = False) -> list[Path]:
-    """Recursively crawl a directory tree
-    and return a list of files as pathlib.Path objects.
-    :param quiet: If True, don't print information about the crawl."""
-    files = []
-    for path in Path(start_dir).iterdir():
-        if not quiet:
-            print_in_place(f"Crawling {path}")
-        if path.is_file():
-            files.append(path)
-        elif path.is_dir():
-            files.extend(crawl(path))
-    if not quiet:
-        clear()
-    return files
+def crawl(start_dir: Path | str) -> Generator[Path, None, None]:
+    """Glorified rglob.
+    Returns a generator yielding all files in start_dir and
+    its sub directories."""
+    return Path(start_dir).rglob("*.*")
 
 
 def get_directory_size(start_dir: Path | str) -> int:
     """Return the size of a directory tree in bytes."""
-    return sum(file.stat().st_size for file in crawl(start_dir, quiet=True))
+    return sum(file.stat().st_size for file in crawl(start_dir))
 
 
 def format_size(size_bytes: int) -> str:

@@ -5,13 +5,10 @@ build-backend = "hatchling.build"
 [project]
 name = "pathcrawler"
 authors = [{name="Matt Manes"}]
-description = "I got tired of typing more than one line to get a recursive list of pathlib.Path objects for a given directory."
-version = "1.0.0"
+description = "This used to be more useful when I didn't realize I could just rglob('*.*'). Leaving it up so I don't break my other projects/ format_size() is still convenient."
+version = "2.0.0"
 requires-python = ">=3.10"
-dependencies = [
-
-	"printbuddies~=1.0.0"
-]
+dependencies = []
 readme = "README.md"
 keywords = [
     "directory"

@@ -27,30 +27,19 @@
 <span>Expand source code</span>
 </summary>
 <pre><code class="python">from pathlib import Path
+from typing import Generator
 
-from printbuddies import clear, print_in_place
 
-
-def crawl(start_dir: Path | str, quiet: bool = False) -&gt; list[Path]:
-    &#34;&#34;&#34;Recursively crawl a directory tree
-    and return a list of files as pathlib.Path objects.
-    :param quiet: If True, don&#39;t print information about the crawl.&#34;&#34;&#34;
-    files = []
-    for path in Path(start_dir).iterdir():
-        if not quiet:
-            print_in_place(f&#34;Crawling {path}&#34;)
-        if path.is_file():
-            files.append(path)
-        elif path.is_dir():
-            files.extend(crawl(path))
-    if not quiet:
-        clear()
-    return files
+def crawl(start_dir: Path | str) -&gt; Generator[Path, None, None]:
+    &#34;&#34;&#34;Glorified rglob.
+    Returns a generator yielding all files in start_dir and
+    its sub directories.&#34;&#34;&#34;
+    return Path(start_dir).rglob(&#34;*.*&#34;)
 
 
 def get_directory_size(start_dir: Path | str) -&gt; int:
     &#34;&#34;&#34;Return the size of a directory tree in bytes.&#34;&#34;&#34;
-    return sum(file.stat().st_size for file in crawl(start_dir, quiet=True))
+    return sum(file.stat().st_size for file in crawl(start_dir))
 
 
 def format_size(size_bytes: int) -&gt; str:
@@ -73,31 +62,21 @@ def format_size(size_bytes: int) -&gt; str:
 <h2 class="section-title" id="header-functions">Functions</h2>
 <dl>
 <dt id="pathcrawler.pathcrawler.crawl"><code class="name flex">
-<span>def <span class="ident">crawl</span></span>(<span>start_dir: pathlib.Path | str, quiet: bool = False) ‑> list[pathlib.Path]</span>
+<span>def <span class="ident">crawl</span></span>(<span>start_dir: pathlib.Path | str) ‑> Generator[pathlib.Path, None, None]</span>
 </code></dt>
 <dd>
-<div class="desc"><p>Recursively crawl a directory tree
-and return a list of files as pathlib.Path objects.
-:param quiet: If True, don't print information about the crawl.</p></div>
+<div class="desc"><p>Glorified rglob.
+Returns a generator yielding all files in start_dir and
+its sub directories.</p></div>
 <details class="source">
 <summary>
 <span>Expand source code</span>
 </summary>
-<pre><code class="python">def crawl(start_dir: Path | str, quiet: bool = False) -&gt; list[Path]:
-    &#34;&#34;&#34;Recursively crawl a directory tree
-    and return a list of files as pathlib.Path objects.
-    :param quiet: If True, don&#39;t print information about the crawl.&#34;&#34;&#34;
-    files = []
-    for path in Path(start_dir).iterdir():
-        if not quiet:
-            print_in_place(f&#34;Crawling {path}&#34;)
-        if path.is_file():
-            files.append(path)
-        elif path.is_dir():
-            files.extend(crawl(path))
-    if not quiet:
-        clear()
-    return files</code></pre>
+<pre><code class="python">def crawl(start_dir: Path | str) -&gt; Generator[Path, None, None]:
+    &#34;&#34;&#34;Glorified rglob.
+    Returns a generator yielding all files in start_dir and
+    its sub directories.&#34;&#34;&#34;
+    return Path(start_dir).rglob(&#34;*.*&#34;)</code></pre>
 </details>
 </dd>
 <dt id="pathcrawler.pathcrawler.format_size"><code class="name flex">
@@ -134,7 +113,7 @@ i.e. format_size(1572166) returns "1.57 mb"</p></div>
 </summary>
 <pre><code class="python">def get_directory_size(start_dir: Path | str) -&gt; int:
     &#34;&#34;&#34;Return the size of a directory tree in bytes.&#34;&#34;&#34;
-    return sum(file.stat().st_size for file in crawl(start_dir, quiet=True))</code></pre>
+    return sum(file.stat().st_size for file in crawl(start_dir))</code></pre>
 </details>
 </dd>
 </dl>

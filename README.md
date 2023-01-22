@@ -1,5 +1,5 @@
 # pathcrawler
-Small utility because I got tired of typing more than one line to get a recursive list of pathlib.Path objects for a directory.<br>
+Just a file globber that also give you directory size.<br>
 Install using:
 <pre>pip install pathcrawler</pre>
 <br>
